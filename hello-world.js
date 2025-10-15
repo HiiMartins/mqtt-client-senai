@@ -1,16 +1,15 @@
 const mqtt = require("mqtt");
-const client = mqtt.connect("mqtt://test.mosquitto.org");
+const client = mqtt.connect("mqtt://test.mosquitto.org/");
 
+// Abre a conexão com o broker
 client.on("connect", () => {
-  client.subscribe("presence", (err) => {
-    if (!err) {
-      client.publish("presence", "Hello mqtt");
-    }
-  });
+  // Se inscreve e publica no tópico presence
+  client.subscribe("iot/umidade/sala01");
+  client.subscribe("iot/temperatura/sala01");
 });
 
+//Recebe as mensagens dos tópicos que o cliente é incristo
 client.on("message", (topic, message) => {
-  // Sem client.end() - ficaria executando para sempre
   console.log("Mensagem recebida:", message.toString());
-  // O script não termina, continua ouvindo novas mensagens
+  // Sem client.end() - a função não é finalizada. 
 });
