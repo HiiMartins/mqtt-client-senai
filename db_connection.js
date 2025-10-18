@@ -23,7 +23,11 @@ async function findAll() {
     return db.collection(collectionName).find()
 }
 
-module.exports = { findAll }
+async function insert(params) {
+    const db = await connect();
+    return db.colletion(collectionName).insertOne(params)
+
+module.exports = { findAll, insert }
 
 
 
