@@ -3,24 +3,19 @@ const { MongoClient } = require('mongodb');
 const url = 'mongodb://localhost';
 const client = new MongoClient(url);
 
-const dbName = 'teste';
+const dbName = 'senai_teste';
 
-async function main(params) {
-    await client.connect();
-    console.log('conectado com sucesso ao servidor');
-    const db = client.db(dbName);
-    const collection = db.collection('teste');
-    
-    const insertResult = await collection.insertOne(params);
-    console.log('Documentos inseridos =>', insertResult);
-    
-    const findResult = await collection.find({}).toArray();
-    console.log('Documentos encontrados =>', findResult);
+let singleton
 
-    return 'feito.';
+async function connect() {
+    if (singleton) return singleton;
+    
+    const client = new MongoClient(url)
+    await client.connect(); 
+    
+    singleton = client.db(dbName);
+    return singleton;
 }
 
-main(params)
-    .then(console.log)
-    .catch(console.error)
-    .finally(() => client.close());
+
+
