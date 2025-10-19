@@ -20,14 +20,12 @@ async function connect() {
 
 async function findAll() {
     const db = await connect();
-    return db.collection(collectionName).find()
+    return db.collection(collectionName).find();
 }
 
 async function insert(params) {
     const db = await connect();
-    return db.colletion(collectionName).insertOne(params)
+    return db.collection(collectionName).insertOne(params);
+}
 
-module.exports = { findAll, insert }
-
-
-
+module.exports = { findAll, insert };
