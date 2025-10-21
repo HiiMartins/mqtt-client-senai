@@ -11,15 +11,10 @@ let insertDoc = {};
 
 //loop que aguarda por mensagens publicadas no topicos que esta inscrita
 client.on("message", (topic, message) => {
-    insertDoc.sensor = "sala1";
-    //verificar se insertDoc é iniciada
-    console.log(insertDoc);
+    insertDoc.sensor = topic.split('/').pop();
     
     //recebe e prepara as mensagens dos topicos
     const data = JSON.parse(message.toString());
-    console.log(topic);
-    console.log(data);
-    console.log("______");
     
     //insere os dados de temperatura e umidade no documento que sera gravado no banco
     if (topic.includes('temperatura')) {
@@ -28,10 +23,12 @@ client.on("message", (topic, message) => {
       insertDoc.umidade = data.umidade;
     }
         
-        //Se o documento possui temp e umi executa a inserção no db e limpa o doc para uma proxima leitura
+    //se o documento possui temp e umi executa a inserção no db e limpa o doc para uma proxima leitura
     if (insertDoc.temperatura !== undefined && insertDoc.umidade !== undefined) {
       insertDoc.timestamp = new Date().toISOString();
-      db.insert(insertDoc);
+      incertedMessage = db.insert(insertDoc);
       insertDoc = {};
+      console.log(incertedMessage);
+      console.log(insertDoc);
     }
 });
