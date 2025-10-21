@@ -1,26 +1,20 @@
 const { MongoClient } = require('mongodb');
 
 const url = 'mongodb://localhost';
-const client = new MongoClient(url);
+const client = new MongoClient(url)
 
-const dbName = 'senai_teste';
-const collectionName = "teste";
+//pontuar sobre a forma de criação da base de dados e collection
+const dbName = 'senai';
+const collectionName = "leituras";
 
-let singleton
+let singleton;
 
 async function connect() {
     if (singleton) return singleton;
     
-    const client = new MongoClient(url)
     await client.connect(); 
-    
     singleton = client.db(dbName);
     return singleton;
-}
-
-async function findAll() {
-    const db = await connect();
-    return db.collection(collectionName).find();
 }
 
 async function insert(params) {
@@ -28,4 +22,4 @@ async function insert(params) {
     return db.collection(collectionName).insertOne(params);
 }
 
-module.exports = { findAll, insert };
+module.exports = { insert };
